@@ -4,6 +4,8 @@ namespace TaskFlow.Infrastructure.Repositories.Interfaces
 {
     public interface IUserRepository
     {
+        Task SaveChangesAsync();
+
         Task<User?> GetByIdAsync(Guid id);
 
         Task<User?> GetByUsernameAsync(string username);

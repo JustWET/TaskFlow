@@ -14,6 +14,11 @@ namespace TaskFlow.Infrastructure.Repositories
             _context = context;
         }
 
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<TaskList?> GetByIdAsync(Guid id)
         {
             return await _context.TaskLists

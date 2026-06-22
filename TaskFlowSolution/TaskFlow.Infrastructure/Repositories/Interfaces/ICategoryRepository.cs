@@ -4,6 +4,8 @@ namespace TaskFlow.Infrastructure.Repositories.Interfaces
 {
     public interface ICategoryRepository
     {
+        Task SaveChangesAsync();
+
         Task<Category?> GetByIdAsync(Guid id);
 
         Task<List<Category>> GetAllByUserIdAsync(Guid userId);

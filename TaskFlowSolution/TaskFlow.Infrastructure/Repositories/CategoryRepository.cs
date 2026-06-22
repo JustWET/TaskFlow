@@ -14,6 +14,11 @@ public class CategoryRepository : ICategoryRepository
         _context = context;
     }
 
+    public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<Category?> GetByIdAsync(Guid id)
     {
         return await _context.Categories.FindAsync(id);
