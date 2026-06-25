@@ -12,7 +12,7 @@ using TaskFlow.Infrastructure.Contexts;
 namespace TaskFlow.Infrastructure.Migrations
 {
     [DbContext(typeof(TodoDbContext))]
-    [Migration("20260622121051_InitialCreate")]
+    [Migration("20260625144924_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -108,13 +108,13 @@ namespace TaskFlow.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("PasswordHash")
+                    b.Property<byte[]>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
-                    b.Property<string>("PasswordSalt")
+                    b.Property<byte[]>("PasswordSalt")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Username")
                         .IsRequired()

@@ -33,10 +33,10 @@ namespace TaskFlow.API.Services
             if (string.IsNullOrWhiteSpace(username))
                 throw new ArgumentException("Username cannot be empty.", nameof(username));
 
-            if (string.IsNullOrWhiteSpace(password) || password.Length < 8)
+            if (string.IsNullOrWhiteSpace(password) || password.Length < 6)
                 throw new ArgumentOutOfRangeException(
                     nameof(password),
-                    "Password must be at least 8 characters long.");
+                    "Password must be at least 6 characters long.");
 
             if (existing != null)
                 throw new InvalidOperationException("Username already exists.");
