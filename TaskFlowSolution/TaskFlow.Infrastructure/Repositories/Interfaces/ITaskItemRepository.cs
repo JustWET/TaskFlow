@@ -25,5 +25,7 @@ namespace TaskFlow.Infrastructure.Repositories.Interfaces
         Task<bool> AnyInTaskListAsync(Guid taskListId);
 
         Task DeleteAllByTaskListIdAsync(Guid taskListId);
+
+        Task ClearCategoryAsync(Guid categoryId);
     }
 }

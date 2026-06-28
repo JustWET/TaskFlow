@@ -86,5 +86,17 @@ namespace TaskFlow.Infrastructure.Repositories
 
             _context.Tasks.RemoveRange(tasks);
         }
+
+        public async Task ClearCategoryAsync(Guid categoryId)
+        {
+            var tasks = await _context.Tasks
+                .Where(t => t.CategoryId == categoryId)
+                .ToListAsync();
+
+            foreach (var task in tasks)
+            {
+                task.CategoryId = null;
+            }
+        }
     }
 }
