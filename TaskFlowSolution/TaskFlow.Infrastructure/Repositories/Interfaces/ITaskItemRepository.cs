@@ -21,5 +21,9 @@ namespace TaskFlow.Infrastructure.Repositories.Interfaces
         Task UpdateAsync(TaskItem task);
 
         Task DeleteAsync(TaskItem task);
+
+        Task<bool> AnyInTaskListAsync(Guid taskListId);
+
+        Task DeleteAllByTaskListIdAsync(Guid taskListId);
     }
 }

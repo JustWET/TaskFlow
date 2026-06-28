@@ -56,19 +56,35 @@ namespace TaskFlow.Infrastructure.Repositories
         public async Task AddAsync(TaskItem task)
         {
             await _context.Tasks.AddAsync(task);
-            await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(TaskItem task)
+        public Task UpdateAsync(TaskItem task)
         {
             _context.Tasks.Update(task);
-            await _context.SaveChangesAsync();
+
+            return Task.CompletedTask;
         }
 
-        public async Task DeleteAsync(TaskItem task)
+        public Task DeleteAsync(TaskItem task)
         {
             _context.Tasks.Remove(task);
-            await _context.SaveChangesAsync();
+
+            return Task.CompletedTask;
+        }
+
+        public async Task<bool> AnyInTaskListAsync(Guid taskListId)
+        {
+            return await _context.Tasks
+                .AnyAsync(t => t.TaskListId == taskListId);
+        }
+
+        public async Task DeleteAllByTaskListIdAsync(Guid taskListId)
+        {
+            var tasks = await _context.Tasks
+                .Where(t => t.TaskListId == taskListId)
+                .ToListAsync();
+
+            _context.Tasks.RemoveRange(tasks);
         }
     }
 }
