@@ -11,8 +11,8 @@
         public DateTime? DueDate { get; set; }
         public Priority Priority { get; set; } = Priority.Low;
         public string? Description { get; set; }
-        public Category? Category { get; set; }
 
+        public Category? Category { get; set; }
         public TaskList TaskList { get; set; } = null!;
     }
 }
