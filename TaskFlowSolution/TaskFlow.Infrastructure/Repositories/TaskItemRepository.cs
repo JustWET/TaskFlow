@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskFlow.Domain.Entities;
+using TaskFlow.Domain.Models;
 using TaskFlow.Infrastructure.Contexts;
 using TaskFlow.Infrastructure.Repositories.Interfaces;
 
@@ -25,11 +26,25 @@ namespace TaskFlow.Infrastructure.Repositories
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        public async Task<List<TaskItem>> GetAllByTaskListIdAsync(Guid taskListId)
+        public async Task<PagedResult<TaskItem>> GetAllByTaskListIdAsync(Guid taskListId, int page, int pageSize)
         {
-            return await _context.Tasks
-                .Where(t => t.TaskListId == taskListId)
+            var query = _context.Tasks
+                .Where(t => t.TaskListId == taskListId);
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+
+            return new PagedResult<TaskItem>
+            {
+                Items = items,
+                Page = page,
+                PageSize = pageSize,
+                TotalCount = totalCount
+            };
         }
 
         public async Task<List<TaskItem>> GetAllByCategoryIdAsync(Guid categoryId)

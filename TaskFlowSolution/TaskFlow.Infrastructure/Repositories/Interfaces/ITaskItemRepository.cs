@@ -1,4 +1,5 @@
 ﻿using TaskFlow.Domain.Entities;
+using TaskFlow.Domain.Models;
 
 namespace TaskFlow.Infrastructure.Repositories.Interfaces
 {
@@ -8,7 +9,7 @@ namespace TaskFlow.Infrastructure.Repositories.Interfaces
 
         Task<TaskItem?> GetByIdAsync(Guid id);
 
-        Task<List<TaskItem>> GetAllByTaskListIdAsync(Guid taskListId);
+        Task<PagedResult<TaskItem>> GetAllByTaskListIdAsync(Guid taskListId, int page, int pageSize);
 
         Task<List<TaskItem>> GetAllByCategoryIdAsync(Guid categoryId);
 

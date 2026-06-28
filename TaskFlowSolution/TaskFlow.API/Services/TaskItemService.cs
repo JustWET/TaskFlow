@@ -1,6 +1,7 @@
 ﻿using TaskFlow.API.DTOs;
 using TaskFlow.API.Services.Interfaces;
 using TaskFlow.Domain.Entities;
+using TaskFlow.Domain.Models;
 using TaskFlow.Infrastructure.Repositories.Interfaces;
 
 namespace TaskFlow.API.Services
@@ -34,7 +35,7 @@ namespace TaskFlow.API.Services
             return task;
         }
 
-        public async Task<List<TaskItem>> GetAllAsync(Guid currentUserId, Guid taskListId)
+        public async Task<PagedResult<TaskItem>> GetAllAsync(Guid currentUserId, Guid taskListId, int page, int pageSize)
         {
             var taskList = await _taskListRepository.GetByIdAsync(taskListId);
 
@@ -44,7 +45,7 @@ namespace TaskFlow.API.Services
             if (taskList.UserId != currentUserId)
                 throw new UnauthorizedAccessException();
 
-            return await _taskItemRepository.GetAllByTaskListIdAsync(taskListId);
+            return await _taskItemRepository.GetAllByTaskListIdAsync(taskListId, page, pageSize);
         }
 
         public async Task<TaskItem> CreateAsync(Guid currentUserId, Guid taskListId, CreateOrUpdateTaskDto taskDto)

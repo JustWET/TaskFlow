@@ -4,6 +4,7 @@ using TaskFlow.API.Abstractions;
 using TaskFlow.API.DTOs;
 using TaskFlow.API.Services.Interfaces;
 using TaskFlow.Domain.Entities;
+using TaskFlow.Domain.Models;
 
 namespace TaskFlow.API.Controllers
 {
@@ -31,11 +32,17 @@ namespace TaskFlow.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ResponseTaskDto>>> GetAll(Guid taskListId)
+        public async Task<ActionResult<List<ResponseTaskDto>>> GetAll(Guid taskListId, int page = 1, int pageSize = 15)
         {
-            var tasks = await _taskItemService.GetAllAsync(GetUserId(), taskListId);
+            var result = await _taskItemService.GetAllAsync(GetUserId(), taskListId, page, pageSize);
 
-            return Ok(tasks.Select(ToDto).ToList());
+            return Ok(new PagedResult<ResponseTaskDto>
+            {
+                Items = result.Items.Select(ToDto).ToList(),
+                Page = result.Page,
+                PageSize = result.PageSize,
+                TotalCount = result.TotalCount
+            });
         }
 
         [HttpPost]

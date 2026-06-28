@@ -1,5 +1,6 @@
 ﻿using TaskFlow.API.DTOs;
 using TaskFlow.Domain.Entities;
+using TaskFlow.Domain.Models;
 
 namespace TaskFlow.API.Services.Interfaces
 {
@@ -7,7 +8,7 @@ namespace TaskFlow.API.Services.Interfaces
     {
         Task<TaskItem?> GetByIdAsync(Guid currentUserId, Guid taskId);
 
-        Task<List<TaskItem>> GetAllAsync(Guid currentUserId, Guid taskListId);
+        Task<PagedResult<TaskItem>> GetAllAsync(Guid currentUserId, Guid taskListId, int page, int pageSize);
 
         Task<TaskItem> CreateAsync(
             Guid currentUserId,
