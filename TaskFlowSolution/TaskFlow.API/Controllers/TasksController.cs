@@ -32,9 +32,9 @@ namespace TaskFlow.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ResponseTaskDto>>> GetAll(Guid taskListId, int page = 1, int pageSize = 15)
+        public async Task<ActionResult<PagedResult<ResponseTaskDto>>> GetAll(Guid taskListId, [FromQuery] TaskQuery taskQuery)
         {
-            var result = await _taskItemService.GetAllAsync(GetUserId(), taskListId, page, pageSize);
+            var result = await _taskItemService.GetAllAsync(GetUserId(), taskListId, taskQuery);
 
             return Ok(new PagedResult<ResponseTaskDto>
             {

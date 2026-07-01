@@ -9,7 +9,7 @@ namespace TaskFlow.Infrastructure.Repositories.Interfaces
 
         Task<TaskItem?> GetByIdAsync(Guid id);
 
-        Task<PagedResult<TaskItem>> GetAllByTaskListIdAsync(Guid taskListId, int page, int pageSize);
+        Task<PagedResult<TaskItem>> GetAllByTaskListIdAsync(Guid taskListId, TaskQuery taskQuery);
 
         Task<List<TaskItem>> GetAllByCategoryIdAsync(Guid categoryId);
 

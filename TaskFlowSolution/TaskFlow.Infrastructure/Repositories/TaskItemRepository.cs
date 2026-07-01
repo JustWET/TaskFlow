@@ -26,12 +26,50 @@ namespace TaskFlow.Infrastructure.Repositories
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        public async Task<PagedResult<TaskItem>> GetAllByTaskListIdAsync(Guid taskListId, int page, int pageSize)
+        public async Task<PagedResult<TaskItem>> GetAllByTaskListIdAsync(Guid taskListId, TaskQuery taskQuery)
         {
             var query = _context.Tasks
                 .Where(t => t.TaskListId == taskListId);
 
+            if (!string.IsNullOrWhiteSpace(taskQuery.Search))
+            {
+                query = query.Where(t =>
+                    t.Name.Contains(taskQuery.Search));
+            }
+
+            if (taskQuery.CategoryId.HasValue)
+            {
+                query = query.Where(t => t.CategoryId == taskQuery.CategoryId.Value);
+            }
+
+            switch (taskQuery.SortBy)
+            {
+                case TaskSortBy.Name:
+                    query = taskQuery.Descending
+                        ? query.OrderByDescending(t => t.Name)
+                        : query.OrderBy(t => t.Name);
+                    break;
+
+                case TaskSortBy.DueDate:
+                    query = taskQuery.Descending
+                        ? query.OrderByDescending(t => t.DueDate)
+                        : query.OrderBy(t => t.DueDate);
+                    break;
+
+                case TaskSortBy.Priority:
+                    query = taskQuery.Descending
+                        ? query.OrderByDescending(t => t.Priority)
+                        : query.OrderBy(t => t.Priority);
+                    break;
+                default:
+                    query = query.OrderBy(t => t.Name);
+                    break;
+            }
+
             var totalCount = await query.CountAsync();
+
+            var page = Math.Max(taskQuery.Page, 1);
+            var pageSize = Math.Clamp(taskQuery.PageSize, 1, 100);
 
             var items = await query
                 .Skip((page - 1) * pageSize)

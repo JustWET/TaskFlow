@@ -8,7 +8,7 @@ namespace TaskFlow.API.Services.Interfaces
     {
         Task<TaskItem?> GetByIdAsync(Guid currentUserId, Guid taskId);
 
-        Task<PagedResult<TaskItem>> GetAllAsync(Guid currentUserId, Guid taskListId, int page, int pageSize);
+        Task<PagedResult<TaskItem>> GetAllAsync(Guid currentUserId, Guid taskListId, TaskQuery taskQuery);
 
         Task<TaskItem> CreateAsync(
             Guid currentUserId,

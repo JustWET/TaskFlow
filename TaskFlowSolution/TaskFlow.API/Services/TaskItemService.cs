@@ -35,7 +35,7 @@ namespace TaskFlow.API.Services
             return task;
         }
 
-        public async Task<PagedResult<TaskItem>> GetAllAsync(Guid currentUserId, Guid taskListId, int page, int pageSize)
+        public async Task<PagedResult<TaskItem>> GetAllAsync(Guid currentUserId, Guid taskListId, TaskQuery taskQuery)
         {
             var taskList = await _taskListRepository.GetByIdAsync(taskListId);
 
@@ -45,7 +45,7 @@ namespace TaskFlow.API.Services
             if (taskList.UserId != currentUserId)
                 throw new UnauthorizedAccessException();
 
-            return await _taskItemRepository.GetAllByTaskListIdAsync(taskListId, page, pageSize);
+            return await _taskItemRepository.GetAllByTaskListIdAsync(taskListId, taskQuery);
         }
 
         public async Task<TaskItem> CreateAsync(Guid currentUserId, Guid taskListId, CreateOrUpdateTaskDto taskDto)
