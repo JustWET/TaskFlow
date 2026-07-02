@@ -28,10 +28,12 @@ namespace TaskFlow.API.Services
 
         public async Task<string> RegisterAsync(string username, string password)
         {
-            var existing = await _userRepository.GetByUsernameAsync(username);
-
             if (string.IsNullOrWhiteSpace(username))
                 throw new ArgumentException("Username cannot be empty.", nameof(username));
+
+            username = username.Trim();
+
+            var existing = await _userRepository.GetByUsernameAsync(username);
 
             if (string.IsNullOrWhiteSpace(password) || password.Length < 6)
                 throw new ArgumentOutOfRangeException(
@@ -59,6 +61,14 @@ namespace TaskFlow.API.Services
 
         public async Task<string?> LoginAsync(string username, string password)
         {
+            if (string.IsNullOrWhiteSpace(username))
+                throw new ArgumentException("Username cannot be empty.", nameof(username));
+
+            if (string.IsNullOrWhiteSpace(password))
+                throw new ArgumentException("Password cannot be empty.", nameof(password));
+
+            username = username.Trim();
+
             var user = await _userRepository.GetByUsernameAsync(username);
 
             if (user == null)
@@ -72,10 +82,12 @@ namespace TaskFlow.API.Services
 
         public async Task UpdateAsync(Guid currentUserId, UserDto userDto)
         {
-            var user = await _userRepository.GetByIdAsync(currentUserId);
-
             if (string.IsNullOrWhiteSpace(userDto.Username))
                 throw new InvalidOperationException("Username cannot be empty.");
+
+            userDto.Username = userDto.Username.Trim();
+
+            var user = await _userRepository.GetByIdAsync(currentUserId);
 
             if (user == null)
                 throw new InvalidOperationException("User not found.");

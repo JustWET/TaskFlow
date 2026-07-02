@@ -67,7 +67,7 @@ namespace TaskFlow.API.Services
                 Id = Guid.NewGuid(),
                 TaskListId = taskListId,
                 CategoryId = taskDto.CategoryId,
-                Name = taskDto.Name,
+                Name = taskDto.Name.Trim(),
                 IsCompleted = taskDto.IsCompleted,
                 DueDate = taskDto.DueDate,
                 Priority = taskDto.Priority,
@@ -94,7 +94,7 @@ namespace TaskFlow.API.Services
 
             await ValidateCategoryAsync(currentUserId, taskDto.CategoryId);
 
-            task.Name = taskDto.Name;
+            task.Name = taskDto.Name.Trim();
             task.CategoryId = taskDto.CategoryId;
             task.IsCompleted = taskDto.IsCompleted;
             task.Priority = taskDto.Priority;
@@ -142,7 +142,7 @@ namespace TaskFlow.API.Services
             if (task.TaskList.UserId != currentUserId)
                 throw new UnauthorizedAccessException();
 
-            task.Name = name;
+            task.Name = name.Trim();
 
             await _taskItemRepository.UpdateAsync(task);
             await _taskItemRepository.SaveChangesAsync();

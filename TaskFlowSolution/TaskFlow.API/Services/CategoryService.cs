@@ -43,7 +43,7 @@ namespace TaskFlow.API.Services
             var category = new Category
             {
                 Id = Guid.NewGuid(),
-                Name = name,
+                Name = name.Trim(),
                 UserId = currentUserId
             };
 
@@ -66,7 +66,7 @@ namespace TaskFlow.API.Services
             if (category.UserId != currentUserId)
                 throw new UnauthorizedAccessException();
 
-            category.Name = name;
+            category.Name = name.Trim();
 
             await _categoryRepository.UpdateAsync(category);
             await _categoryRepository.SaveChangesAsync();
