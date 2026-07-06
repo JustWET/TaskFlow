@@ -25,7 +25,12 @@ namespace TaskFlow.API.Controllers
                 request.Username,
                 request.Password);
 
-            return Ok(token);
+            var response = new AuthResponseDto
+            {
+                Token = token
+            };
+
+            return Ok(response);
         }
 
         [AllowAnonymous]
@@ -39,7 +44,12 @@ namespace TaskFlow.API.Controllers
             if (token == null)
                 return Unauthorized("Invalid username or password.");
 
-            return Ok(token);
+            var response = new AuthResponseDto
+            {
+                Token = token
+            };
+
+            return Ok(response);
         }
 
         [Authorize]

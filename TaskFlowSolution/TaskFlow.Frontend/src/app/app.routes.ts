@@ -1,3 +1,25 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+import { Login } from './pages/login/login';
+import { Register } from './pages/register/register';
+import { TaskLists } from './pages/task-lists/task-lists';
+
+export const routes: Routes = [
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full',
+  },
+  {
+    path: 'login',
+    component: Login,
+  },
+  {
+    path: 'register',
+    component: Register,
+  },
+  {
+    path: 'task-lists',
+    component: TaskLists,
+  },
+];

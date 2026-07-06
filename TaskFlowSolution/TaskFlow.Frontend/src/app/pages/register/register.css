@@ -1,0 +1,26 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: #f8f9fa;
+
+  padding: 1rem;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+
+  border-radius: 16px;
+}
+
+.form-control {
+  height: 48px;
+}
+
+.btn {
+  height: 48px;
+  font-weight: 600;
+}

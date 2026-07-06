@@ -1,0 +1,115 @@
+<div class="login-page">
+
+  <div class="card shadow-sm border-0 login-card">
+
+    <div class="card-body p-5">
+
+      <h2 class="text-center fw-bold mb-2">
+        Create account
+      </h2>
+
+      <form
+        [formGroup]="registerForm"
+        (ngSubmit)="onSubmit()">
+
+        <div class="mb-3">
+
+          <label
+            for="username"
+            class="form-label">
+
+            Username
+
+          </label>
+
+          <input
+            id="username"
+            type="text"
+            class="form-control"
+            formControlName="username">
+
+          @if (
+            registerForm.controls.username.touched &&
+            registerForm.controls.username.hasError('required')
+          ) {
+
+            <div class="text-danger small mt-1">
+              Username is required.
+            </div>
+
+          }
+
+        </div>
+
+        <div class="mb-4">
+
+          <label
+            for="password"
+            class="form-label">
+
+            Password
+
+          </label>
+
+          <input
+            id="password"
+            type="password"
+            class="form-control"
+            formControlName="password">
+
+          @if (
+            registerForm.controls.password.touched &&
+            registerForm.controls.password.hasError('required')
+          ) {
+
+            <div class="text-danger small mt-1">
+              Password is required.
+            </div>
+
+          }
+
+          @if (
+            registerForm.controls.password.touched &&
+            registerForm.controls.password.hasError('minlength')
+          ) {
+
+            <div class="text-danger small mt-1">
+              Password must contain at least 6 characters.
+            </div>
+
+          }
+
+        </div>
+
+        <button
+          class="btn btn-primary w-100"
+          type="submit"
+          [disabled]="registerForm.invalid">
+
+          Register
+
+        </button>
+
+      </form>
+
+      <hr class="my-4">
+
+      <p class="text-center text-secondary mb-0">
+
+        Already have an account?
+
+        <a
+          routerLink="/login"
+          class="text-decoration-none">
+
+          Login
+
+        </a>
+
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
