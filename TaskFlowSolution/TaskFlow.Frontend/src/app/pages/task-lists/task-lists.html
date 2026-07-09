@@ -1,1 +1,324 @@
-<p>task-lists works!</p>
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold mb-1">
+                Your Task Lists
+            </h2>
+
+            <p class="text-secondary mb-0">
+                Organize your work into separate lists.
+            </p>
+
+        </div>
+
+        <button
+            class="btn btn-primary"
+            (click)="openCreateModal()">
+
+            + New List
+
+        </button>
+
+    </div>
+    @if (this.isLoading) {
+
+        <div class="text-center py-5">
+
+            <div class="spinner-border"></div>
+
+        </div>
+
+    } @else if (errorMessage) {
+
+        <div class="alert alert-danger">
+
+            {{ errorMessage }}
+
+        </div>
+
+    } @else if (taskLists.length === 0) {
+
+        <div class="empty-state">
+
+            <h4>No task lists yet</h4>
+
+            <p class="text-secondary mb-4">
+                Create your first task list to start organizing your tasks.
+            </p>
+
+            <button
+                class="btn btn-primary"
+                (click)="createTaskList()">
+
+                Create First List
+
+            </button>
+
+        </div>
+
+    } @else {
+
+        <div class="row g-4">
+
+            @for (taskList of taskLists; track taskList.id) {
+                
+                <div class="col-md-6 col-lg-4">
+
+                    <div
+                        class="task-list-card"
+                        (click)="openTaskList(taskList)">
+
+                        <div class="d-flex justify-content-between">
+
+                            <h5 class="mb-0">
+
+                                {{ taskList.name }}
+
+                            </h5>
+
+                            <div class="d-flex gap-2">
+
+                                <button
+                                    class="btn btn-outline-primary btn-sm"
+                                    title="Rename"
+                                    (click)="openEditModal(taskList); $event.stopPropagation()">
+
+                                    <i class="bi bi-pencil"></i>
+
+                                </button>
+
+                                <button
+                                    class="btn btn-outline-danger btn-sm"
+                                    title="Delete"
+                                    (click)="openDeleteModal(taskList); $event.stopPropagation()">
+
+                                    <i class="bi bi-trash"></i>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            }
+
+        </div>
+
+    }
+
+</div>
+
+@if (showCreateModal) {
+    <div 
+        class="modal-backdrop-custom"
+        (click)="closeCreateModal()">
+
+        <div 
+            class="modal-dialog-custom"
+            (click)="$event.stopPropagation()">
+
+            <div class="card shadow">
+                <div class="card-body">
+                    <h4 class="mb-4">
+
+                        Create Task List
+
+                    </h4>
+
+                    <form
+                        [formGroup]="createForm"
+                        (ngSubmit)="createTaskList()">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Name
+
+                            </label>
+
+                            <input
+                                class="form-control"
+                                formControlName="name">
+
+                            @if (
+                                createForm.controls.name.touched &&
+                                createForm.controls.name.hasError('required')
+                            ) {
+
+                                <div class="text-danger small mt-1">
+
+                                    Name is required.
+
+                                </div>
+
+                            }
+
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-secondary"
+                                (click)="closeCreateModal()">
+
+                                Cancel
+
+                            </button>
+
+                            <button
+                                class="btn btn-primary"
+                                [disabled]="createForm.invalid || isCreating">
+
+                                @if (isCreating) {
+
+                                    <span class="spinner-border spinner-border-sm me-2"></span>
+
+                                }
+
+                                Create
+
+                            </button>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (showEditModal) {
+
+<div
+    class="modal-backdrop-custom"
+    (click)="closeEditModal()">
+
+    <div
+        class="modal-dialog-custom"
+        (click)="$event.stopPropagation()">
+
+        <div class="card shadow">
+
+            <div class="card-body">
+
+                <h4 class="mb-4">
+
+                    Rename Task List
+
+                </h4>
+
+                <form
+                    [formGroup]="editForm"
+                    (ngSubmit)="updateTaskList()">
+
+                    <input
+                        class="form-control mb-3"
+                        formControlName="name">
+
+                    <div class="d-flex justify-content-end gap-2">
+
+                        <button
+                            type="button"
+                            class="btn btn-outline-secondary"
+                            (click)="closeEditModal()">
+
+                            Cancel
+
+                        </button>
+
+                        <button
+                            class="btn btn-primary"
+                            [disabled]="editForm.invalid || isUpdating">
+
+                            Save
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+}
+
+@if (showDeleteModal) {
+
+<div
+    class="modal-backdrop-custom"
+    (click)="closeDeleteModal()">
+
+    <div
+        class="modal-dialog-custom"
+        (click)="$event.stopPropagation()">
+
+        <div class="card shadow">
+
+            <div class="card-body">
+
+                <h4>
+
+                    Delete Task List
+
+                </h4>
+
+                <p class="text-secondary">
+
+                    Are you sure you want to delete
+
+                    <strong>
+
+                        {{ deletingTaskList?.name }}
+
+                    </strong>
+
+                    ?
+
+                </p>
+
+                <div class="d-flex justify-content-end gap-2">
+
+                    <button
+                        class="btn btn-outline-secondary"
+                        (click)="closeDeleteModal()">
+
+                        Cancel
+
+                    </button>
+
+                    <button
+                        class="btn btn-danger"
+                        (click)="deleteTaskList()"
+                        [disabled]="isDeleting">
+
+                        Delete
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+}

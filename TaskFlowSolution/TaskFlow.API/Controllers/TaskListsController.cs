@@ -51,13 +51,13 @@ namespace TaskFlow.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<TaskListDto>> Create(string name)
+        public async Task<ActionResult<TaskListDto>> Create(CreateOrUpdateTaskListDto request)
         {
-            var taskList = await _taskListService.CreateAsync(GetUserId(), name);
+            var taskList = await _taskListService.CreateAsync(GetUserId(), request.Name);
 
             var response = new TaskListDto
             {
-                Name = name,
+                Name = taskList.Name,
                 Id = taskList.Id
             };
 
@@ -65,9 +65,9 @@ namespace TaskFlow.API.Controllers
         }
 
         [HttpPut("{taskListId:guid}")]
-        public async Task<IActionResult> Update(Guid taskListId, string name)
+        public async Task<IActionResult> Update(Guid taskListId, CreateOrUpdateTaskListDto request)
         {
-            await _taskListService.UpdateAsync(GetUserId(), taskListId, name);
+            await _taskListService.UpdateAsync(GetUserId(), taskListId, request.Name);
 
             return NoContent();
         }
