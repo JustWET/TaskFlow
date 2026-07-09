@@ -1,0 +1,128 @@
+<div class="card toolbar shadow-sm">
+
+    <div class="card-body">
+
+        <div class="row g-3 align-items-center">
+
+            <div class="col-lg-4">
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+
+                        <i class="bi bi-search"></i>
+
+                    </span>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Search tasks..."
+                        [(ngModel)]="searchText"
+                        (input)="onSearchChange()">
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-3">
+
+                <select
+                    class="form-select"
+                    [(ngModel)]="selectedSort"
+                    (change)="onSortChange()">
+
+                    <option value="name">
+
+                        Name
+
+                    </option>
+
+                    <option value="priority">
+
+                        Priority
+
+                    </option>
+
+                    <option value="dueDate">
+
+                        Due Date
+
+                    </option>
+
+                    <option value="created">
+
+                        Created
+
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="col-lg-3">
+
+                <select
+                    class="form-select"
+                    [(ngModel)]="selectedFilter"
+                    (change)="onFilterChange()">
+
+                    <option value="all">
+
+                        All Tasks
+
+                    </option>
+
+                    <option value="high">
+
+                        High Priority
+
+                    </option>
+
+                    <option value="medium">
+
+                        Medium Priority
+
+                    </option>
+
+                    <option value="low">
+
+                        Low Priority
+
+                    </option>
+
+                    <option value="today">
+
+                        Due Today
+
+                    </option>
+
+                    <option value="overdue">
+
+                        Overdue
+
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="col-lg-2">
+
+                <button
+                    class="btn btn-primary w-100"
+                    (click)="onCreateTask()">
+
+                    <i class="bi bi-plus-lg me-2"></i>
+
+                    New Task
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

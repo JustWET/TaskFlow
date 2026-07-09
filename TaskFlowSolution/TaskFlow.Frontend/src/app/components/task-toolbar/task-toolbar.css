@@ -1,0 +1,23 @@
+.toolbar {
+    border: none;
+    border-radius: 16px;
+}
+
+.input-group-text {
+    background: white;
+}
+
+.form-control,
+.form-select {
+    height: 46px;
+}
+
+.btn {
+    height: 46px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    box-shadow: none;
+    border-color: #86b7fe;
+}

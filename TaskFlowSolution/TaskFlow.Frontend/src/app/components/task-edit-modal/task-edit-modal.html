@@ -1,0 +1,160 @@
+@if (visible) {
+
+<div
+    class="modal-backdrop-custom"
+    (click)="onClose()">
+
+    <div
+        class="modal-dialog-custom"
+        (click)="$event.stopPropagation()">
+
+        <div class="card shadow">
+
+            <div class="card-body">
+
+                <h3 class="mb-4">
+
+                    Edit Task
+
+                </h3>
+
+                <form
+                    [formGroup]="form"
+                    (ngSubmit)="onSave()">
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            Name
+
+                        </label>
+
+                        <input
+                            class="form-control"
+                            formControlName="name">
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            Description
+
+                        </label>
+
+                        <textarea
+                            rows="4"
+                            class="form-control"
+                            formControlName="description">
+                        </textarea>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Priority
+
+                            </label>
+
+                            <select
+                                class="form-select"
+                                formControlName="priority">
+
+                                @for (priority of priorities; track priority) {
+
+                                    <option [ngValue]="priority">
+
+                                        {{ priority }}
+
+                                    </option>
+
+                                }
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Due Date
+
+                            </label>
+
+                            <input
+                                type="date"
+                                class="form-control"
+                                formControlName="dueDate">
+
+                        </div>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            Category
+
+                        </label>
+
+                        <select
+                            class="form-select"
+                            formControlName="categoryId">
+
+                            <option value="">
+
+                                No category
+
+                            </option>
+
+                            @for (category of categories; track category) {
+
+                                <option [value]="category.id">
+                                    {{ category.name }}
+                                </option>
+
+                            }
+
+                        </select>
+
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+
+                        <button
+                            type="button"
+                            class="btn btn-outline-secondary"
+                            (click)="onClose()">
+
+                            Cancel
+
+                        </button>
+
+                        <button
+                            class="btn btn-primary">
+
+                            Save
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+}

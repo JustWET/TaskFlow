@@ -1,0 +1,29 @@
+<div class="container py-4">
+
+    <app-task-toolbar
+        (createTask)="createTask()">
+    </app-task-toolbar>
+
+    <app-task-table
+        class="mt-4"
+        title="Active Tasks"
+        [tasks]="activeTasks"
+        [(collapsed)]="activeCollapsed">
+    </app-task-table>
+
+    <app-task-table
+        class="mt-4"
+        title="Completed Tasks"
+        [tasks]="completedTasks"
+        [(collapsed)]="completedCollapsed">
+    </app-task-table>
+
+    <app-task-edit-modal
+        [visible]="showEditModal"
+        [task]="selectedTask"
+        [categories]="categories"
+        (close)="closeEditTask()"
+        (save)="saveTask($event)">
+    </app-task-edit-modal>
+
+</div>

@@ -1,0 +1,54 @@
+.container {
+    max-width: 1100px;
+}
+
+.toolbar {
+    border: none;
+    border-radius: 16px;
+}
+
+.task-section {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.section-header {
+    background: #f8f9fa;
+    padding: 18px 24px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid #ececec;
+}
+
+.section-header.collapsed {
+    border-bottom: none;
+}
+
+.table {
+    margin: 0;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+.table tbody tr:hover {
+    background: #fafafa;
+}
+
+.badge {
+    font-size: .8rem;
+}
+
+.btn-sm {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}

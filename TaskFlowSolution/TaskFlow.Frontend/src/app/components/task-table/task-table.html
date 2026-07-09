@@ -1,0 +1,72 @@
+<div class="task-section">
+
+    <div
+        class="section-header"
+        (click)="toggle()">
+
+        <span class="arrow">
+
+            {{ collapsed ? '▶' : '▼' }}
+
+        </span>
+
+        <span>
+
+            {{ title }}
+
+        </span>
+
+        <span class="badge bg-secondary ms-auto">
+
+            {{ tasks.length }}
+
+        </span>
+
+    </div>
+
+    @if (!collapsed) {
+
+        <div class="task-grid-header">
+
+            <div></div>
+
+            <div>
+
+                Task
+
+            </div>
+
+            <div>
+
+                Priority
+
+            </div>
+
+            <div>
+
+                Due Date
+
+            </div>
+
+            <div></div>
+
+        </div>
+
+        @for (task of tasks; track task.id) {
+
+            <app-task-row
+                [task]="task"
+
+                (edit)="edit.emit($event)"
+                (delete)="delete.emit($event)"
+                (rename)="rename.emit($event)"
+                (completedChanged)="completedChanged.emit($event)"
+                (priorityChanged)="priorityChanged.emit($event)"
+                (dueDateChanged)="dueDateChanged.emit($event)">
+            </app-task-row>
+
+        }
+
+    }
+
+</div>
