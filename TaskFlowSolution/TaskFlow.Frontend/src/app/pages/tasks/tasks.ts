@@ -1,14 +1,16 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ChangeDetectorRef} from '@angular/core';
 
 import { forkJoin } from 'rxjs';
 
 import { Task } from '../../models/task/task.model';
+import { Priority } from './../../models/task/priority.enum';
+import { TaskSortBy } from './../../models/task/task-sort-by.enum';
 import { Category } from '../../models/category/category.model';
 
 import { TaskQuery } from '../../models/task/task-query.model';
-import { UpdateTask } from '../../models/task/update-task.model';
-import { CreateTask } from '../../models/task/create-task.model';
+import { SaveTaskRequest } from '../../models/task/save-task-request.model';
 
 import { TaskService } from '../../core/services/task.service';
 import { CategoryService } from '../../core/services/category.service';
@@ -28,9 +30,9 @@ import { TaskEditModal } from '../../components/task-edit-modal/task-edit-modal'
   styleUrl: './tasks.css',
 })
 export class Tasks implements OnInit {
+  private readonly cdr = inject(ChangeDetectorRef);
 
   private readonly route = inject(ActivatedRoute);
-
   private readonly router = inject(Router);
 
   private readonly taskService = inject(TaskService);
@@ -57,15 +59,13 @@ export class Tasks implements OnInit {
 
   errorMessage = '';
 
-  readonly query: TaskQuery = {
+  query: TaskQuery = {
     page: 1,
-    pageSize: 100,
+    pageSize: 15,
     search: undefined,
     sortBy: undefined,
-    sortDescending: undefined,
-    priority: undefined,
+    descending: true,
     categoryId: undefined,
-    isCompleted: undefined,
   };
 
   ngOnInit(): void {
@@ -108,9 +108,8 @@ export class Tasks implements OnInit {
       },
 
       complete: () => {
-
         this.isLoading = false;
-
+        this.cdr.detectChanges();
       },
 
     });
@@ -159,7 +158,7 @@ export class Tasks implements OnInit {
 
   }
 
-  saveTask(request: UpdateTask): void {
+  saveTask(request: SaveTaskRequest): void {
 
     if (this.selectedTask) {
 
@@ -198,7 +197,7 @@ export class Tasks implements OnInit {
 
     }
 
-    const createRequest: CreateTask = {
+    const createRequest: SaveTaskRequest = {
       name: request.name,
       description: request.description,
       priority: request.priority,
@@ -362,41 +361,9 @@ export class Tasks implements OnInit {
 
   }
 
-  onSearchChanged(search: string): void {
+  onQueryChanged(query: TaskQuery): void {
 
-    this.query.search = search;
-
-    this.reloadTasks();
-
-  }
-
-  onSortChanged(sortBy: string): void {
-
-    this.query.sortBy = sortBy;
-
-    this.reloadTasks();
-
-  }
-
-  onSortDirectionChanged(descending: boolean): void {
-
-    this.query.sortDescending = descending;
-
-    this.reloadTasks();
-
-  }
-
-  onPriorityFilterChanged(priority?: string): void {
-
-    this.query.priority = priority;
-
-    this.reloadTasks();
-
-  }
-
-  onCategoryFilterChanged(categoryId?: string): void {
-
-    this.query.categoryId = categoryId;
+    this.query = query;
 
     this.reloadTasks();
 
@@ -406,13 +373,11 @@ export class Tasks implements OnInit {
 
     this.query.search = undefined;
 
-    this.query.priority = undefined;
-
     this.query.categoryId = undefined;
 
-    this.query.sortBy = undefined;
+    this.query.sortBy = TaskSortBy.None;
 
-    this.query.sortDescending = undefined;
+    this.query.descending = true;
 
     this.reloadTasks();
 

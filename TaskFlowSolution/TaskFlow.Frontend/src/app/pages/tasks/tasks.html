@@ -1,6 +1,9 @@
 <div class="container py-4">
 
     <app-task-toolbar
+        [query]="query"
+        [categories]="categories"
+        (queryChanged)="onQueryChanged($event)"
         (createTask)="createTask()">
     </app-task-toolbar>
 
@@ -8,14 +11,28 @@
         class="mt-4"
         title="Active Tasks"
         [tasks]="activeTasks"
-        [(collapsed)]="activeCollapsed">
+        [(collapsed)]="activeCollapsed"
+        
+        (edit)="openEditTask($event)"
+        (delete)="deleteTask($event)"
+        (rename)="renameTask($event)"
+        (completedChanged)="toggleCompleted($event)"
+        (priorityChanged)="changePriority($event)"
+        (dueDateChanged)="changeDueDate($event)">
     </app-task-table>
 
     <app-task-table
         class="mt-4"
         title="Completed Tasks"
         [tasks]="completedTasks"
-        [(collapsed)]="completedCollapsed">
+        [(collapsed)]="completedCollapsed"
+        
+        (edit)="openEditTask($event)"
+        (delete)="deleteTask($event)"
+        (rename)="renameTask($event)"
+        (completedChanged)="toggleCompleted($event)"
+        (priorityChanged)="changePriority($event)"
+        (dueDateChanged)="changeDueDate($event)">
     </app-task-table>
 
     <app-task-edit-modal

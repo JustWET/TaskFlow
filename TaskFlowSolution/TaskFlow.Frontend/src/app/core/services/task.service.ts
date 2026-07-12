@@ -5,8 +5,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 import { Task } from '../../models/task/task.model';
-import { CreateTask } from '../../models/task/create-task.model';
-import { UpdateTask } from '../../models/task/update-task.model';
+import { SaveTaskRequest } from '../../models/task/save-task-request.model';
 
 import { RenameTask } from '../../models/task/rename-task.model';
 import { ChangePriority } from '../../models/task/change-priority.model';
@@ -43,11 +42,8 @@ export class TaskService {
           pageSize: query.pageSize,
           search: query.search ?? '',
           sortBy: query.sortBy ?? '',
-          sortDirection: query.sortDirection ?? '',
+          descending: query.descending ?? '',
           categoryId: query.categoryId ?? '',
-          priority: query.priority ?? '',
-          isCompleted:
-            query.isCompleted?.toString() ?? '',
         },
       }
     );
@@ -55,7 +51,7 @@ export class TaskService {
 
   create(
     taskListId: string,
-    request: CreateTask
+    request: SaveTaskRequest
   ): Observable<Task> {
 
     return this.http.post<Task>(
@@ -66,7 +62,7 @@ export class TaskService {
 
   update(
     taskId: string,
-    request: UpdateTask
+    request: SaveTaskRequest
   ): Observable<void> {
 
     return this.http.put<void>(

@@ -1,6 +1,6 @@
 import { Priority } from './priority.enum';
 
-export interface CreateTask {
+export interface SaveTaskRequest  {
   name: string;
   description: string | null;
   priority: Priority;

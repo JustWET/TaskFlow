@@ -18,8 +18,8 @@
                         type="text"
                         class="form-control"
                         placeholder="Search tasks..."
-                        [(ngModel)]="searchText"
-                        (input)="onSearchChange()">
+                        [ngModel]="query.search ?? ''"
+                        (ngModelChange)="onSearchChanged($event)">
 
                 </div>
 
@@ -29,79 +29,24 @@
 
                 <select
                     class="form-select"
-                    [(ngModel)]="selectedSort"
-                    (change)="onSortChange()">
+                    [ngModel]="query.categoryId ?? ''"
+                    (ngModelChange)="onCategoryChanged($event)">
 
-                    <option value="name">
+                    <option value="">
 
-                        Name
-
-                    </option>
-
-                    <option value="priority">
-
-                        Priority
+                        All Categories
 
                     </option>
 
-                    <option value="dueDate">
+                    @for (category of categories; track category.id) {
 
-                        Due Date
+                        <option [value]="category.id">
 
-                    </option>
+                            {{ category.name }}
 
-                    <option value="created">
+                        </option>
 
-                        Created
-
-                    </option>
-
-                </select>
-
-            </div>
-
-            <div class="col-lg-3">
-
-                <select
-                    class="form-select"
-                    [(ngModel)]="selectedFilter"
-                    (change)="onFilterChange()">
-
-                    <option value="all">
-
-                        All Tasks
-
-                    </option>
-
-                    <option value="high">
-
-                        High Priority
-
-                    </option>
-
-                    <option value="medium">
-
-                        Medium Priority
-
-                    </option>
-
-                    <option value="low">
-
-                        Low Priority
-
-                    </option>
-
-                    <option value="today">
-
-                        Due Today
-
-                    </option>
-
-                    <option value="overdue">
-
-                        Overdue
-
-                    </option>
+                    }
 
                 </select>
 
@@ -109,13 +54,111 @@
 
             <div class="col-lg-2">
 
+                <select
+                    class="form-select"
+                    [ngModel]="query.sortBy"
+                    (ngModelChange)="onSortChanged($event)">
+
+                    <option [ngValue]="undefined">
+
+                        No Sorting
+
+                    </option>
+
+                    @for (sortBy of sortOptions; track sortBy) {
+
+                        @if (sortBy !== TaskSortBy.None) {
+
+                            <option [ngValue]="sortBy">
+
+                                {{ sortLabels[sortBy] }}
+
+                            </option>
+
+                        }
+
+                    }
+
+                </select>
+
+            </div>
+
+            <div class="col-lg-1">
+
+                <button
+                    class="btn btn-outline-secondary w-100"
+                    type="button"
+                    (click)="toggleDirection()">
+
+                    <i
+                        class="bi"
+                        [class.bi-sort-down]="query.descending"
+                        [class.bi-sort-up]="!query.descending">
+
+                    </i>
+
+                </button>
+
+            </div>
+
+            <div class="col-lg-2">
+
                 <button
                     class="btn btn-primary w-100"
-                    (click)="onCreateTask()">
+                    type="button"
+                    (click)="createTask.emit()">
 
                     <i class="bi bi-plus-lg me-2"></i>
 
                     New Task
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <button
+                class="btn btn-outline-secondary btn-sm"
+                type="button"
+                (click)="clearFilters()">
+
+                <i class="bi bi-arrow-counterclockwise me-2"></i>
+
+                Reset Filters
+
+            </button>
+
+            <div class="btn-group">
+
+                <button
+                    class="btn btn-outline-secondary btn-sm"
+                    type="button"
+                    (click)="previousPage()">
+
+                    <i class="bi bi-chevron-left"></i>
+
+                </button>
+
+                <button
+                    class="btn btn-outline-secondary btn-sm"
+                    type="button"
+                    disabled>
+
+                    Page {{ query.page }}
+
+                </button>
+
+                <button
+                    class="btn btn-outline-secondary btn-sm"
+                    type="button"
+                    (click)="nextPage()">
+
+                    <i class="bi bi-chevron-right"></i>
 
                 </button>
 

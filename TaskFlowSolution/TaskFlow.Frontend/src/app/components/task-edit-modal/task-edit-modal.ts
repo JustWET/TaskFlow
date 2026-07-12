@@ -18,7 +18,7 @@ import {
 import { Task } from '../../models/task/task.model';
 import { Priority } from '../../models/task/priority.enum';
 import { Category } from '../../models/category/category.model';
-import { UpdateTask } from '../../models/task/update-task.model';
+import { SaveTaskRequest } from '../../models/task/save-task-request.model';
 
 @Component({
   selector: 'app-task-edit-modal',
@@ -43,7 +43,7 @@ export class TaskEditModal implements OnChanges {
   close = new EventEmitter<void>();
 
   @Output()
-  save = new EventEmitter<UpdateTask>();
+  save = new EventEmitter<SaveTaskRequest>();
 
   protected readonly Priority = Priority;
   private readonly fb = inject(FormBuilder);
@@ -85,11 +85,14 @@ export class TaskEditModal implements OnChanges {
   }
 
   onSave(): void {
-    if (!this.task || this.form.invalid) {
+    console.log("onSave()")
+
+    if (this.form.invalid) {
+      console.log("Form is INVALID");
       return;
     }
 
-    const request: UpdateTask = {
+    const request: SaveTaskRequest = {
       name: this.form.controls.name.value,
       description: this.form.controls.description.value || null,
       priority: this.form.controls.priority.value,
@@ -97,6 +100,7 @@ export class TaskEditModal implements OnChanges {
       categoryId: this.form.controls.categoryId.value || null,
     };
 
+    console.log("Save emits!")
     this.save.emit(request);
   }
 }

@@ -1,6 +1,10 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
+import { Category } from '../../models/category/category.model';
+import { TaskQuery } from '../../models/task/task-query.model';
+import { TaskSortBy } from '../../models/task/task-sort-by.enum';
 
 @Component({
   selector: 'app-task-toolbar',
@@ -12,37 +16,126 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './task-toolbar.css',
 })
 export class TaskToolbar {
-  @Output()
-  searchChanged = new EventEmitter<string>();
+  @Input({ required: true })
+  query!: TaskQuery;
+
+  @Input()
+  categories: Category[] = [];
 
   @Output()
-  sortChanged = new EventEmitter<string>();
-
-  @Output()
-  filterChanged = new EventEmitter<string>();
+  queryChanged = new EventEmitter<TaskQuery>();
 
   @Output()
   createTask = new EventEmitter<void>();
 
-  searchText = '';
+  readonly TaskSortBy = TaskSortBy;
 
-  selectedSort = 'name';
+  readonly sortOptions = Object.values(TaskSortBy);
 
-  selectedFilter = 'all';
+  readonly sortLabels: Record<TaskSortBy, string> = {
+    [TaskSortBy.None]: 'No Sorting',
+    [TaskSortBy.Name]: 'Name',
+    [TaskSortBy.DueDate]: 'Due Date',
+    [TaskSortBy.Priority]: 'Priority',
+  };
 
-  onSearchChange(): void {
-    this.searchChanged.emit(this.searchText);
+  onSearchChanged(value: string): void {
+
+    this.queryChanged.emit({
+
+      ...this.query,
+
+      page: 1,
+
+      search: value || undefined,
+
+    });
+
   }
 
-  onSortChange(): void {
-    this.sortChanged.emit(this.selectedSort);
+  onCategoryChanged(value: string): void {
+
+    this.queryChanged.emit({
+
+      ...this.query,
+
+      page: 1,
+
+      categoryId: value || undefined,
+
+    });
+
   }
 
-  onFilterChange(): void {
-    this.filterChanged.emit(this.selectedFilter);
+  onSortChanged(value: TaskSortBy | undefined): void {
+
+    this.queryChanged.emit({
+
+      ...this.query,
+
+      sortBy: value,
+
+    });
+
   }
 
-  onCreateTask(): void {
-    this.createTask.emit();
+  toggleDirection(): void {
+
+    this.queryChanged.emit({
+
+      ...this.query,
+
+      descending: !this.query.descending,
+
+    });
+
+  }
+
+  clearFilters(): void {
+
+    this.queryChanged.emit({
+
+      ...this.query,
+
+      page: 1,
+
+      search: undefined,
+
+      categoryId: undefined,
+
+      sortBy: undefined,
+
+      descending: false,
+
+    });
+
+  }
+
+  previousPage(): void {
+
+    if (this.query.page <= 1) {
+      return;
+    }
+
+    this.queryChanged.emit({
+
+      ...this.query,
+
+      page: this.query.page - 1,
+
+    });
+
+  }
+
+  nextPage(): void {
+
+    this.queryChanged.emit({
+
+      ...this.query,
+
+      page: this.query.page + 1,
+
+    });
+
   }
 }
