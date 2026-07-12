@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 import { Task } from '../../models/task/task.model';
@@ -46,6 +46,12 @@ export class TaskService {
           categoryId: query.categoryId ?? '',
         },
       }
+    )
+    .pipe(
+      map(result => ({
+        ...result,
+        items: result.items.map(task => this.normalizeTask(task)),
+      }))
     );
   }
 
@@ -125,5 +131,17 @@ export class TaskService {
       `${this.apiUrl}/${taskId}/due-date`,
       request
     );
+  }
+
+  private normalizeTask(task: Task): Task {
+
+    return {
+      ...task,
+
+      dueDate: task.dueDate
+        ? task.dueDate.substring(0, 10)
+        : null,
+    };
+
   }
 }

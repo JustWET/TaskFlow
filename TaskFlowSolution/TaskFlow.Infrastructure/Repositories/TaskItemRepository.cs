@@ -23,6 +23,7 @@ namespace TaskFlow.Infrastructure.Repositories
         public async Task<TaskItem?> GetByIdAsync(Guid id)
         {
             return await _context.Tasks
+                .Include(t => t.TaskList)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
 

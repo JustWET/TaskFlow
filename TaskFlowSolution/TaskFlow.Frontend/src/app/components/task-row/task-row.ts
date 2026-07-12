@@ -52,6 +52,7 @@ export class TaskRow {
 
   onDueDateChanged(): void {
     this.dueDateChanged.emit(this.task);
+    console.log(this.task.dueDate);
   }
 
   onEdit(): void {

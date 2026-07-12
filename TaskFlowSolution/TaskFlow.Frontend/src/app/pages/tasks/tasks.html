@@ -2,6 +2,7 @@
 
     <app-task-toolbar
         [query]="query"
+        [totalPages] = "totalPages"
         [categories]="categories"
         (queryChanged)="onQueryChanged($event)"
         (createTask)="createTask()">

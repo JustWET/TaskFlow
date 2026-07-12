@@ -136,8 +136,11 @@
             <div class="btn-group">
 
                 <button
-                    class="btn btn-outline-secondary btn-sm"
+                    class="btn btn-sm"
+                    [class.btn-primary]="query.page > 1"
+                    [class.btn-outline-secondary]="query.page <= 1"
                     type="button"
+                    [disabled]="query.page === 1"
                     (click)="previousPage()">
 
                     <i class="bi bi-chevron-left"></i>
@@ -154,8 +157,11 @@
                 </button>
 
                 <button
-                    class="btn btn-outline-secondary btn-sm"
+                    class="btn btn-sm"
+                    [class.btn-primary]="query.page < totalPages"
+                    [class.btn-outline-secondary]="query.page >= totalPages"
                     type="button"
+                    [disabled]="query.page === totalPages"
                     (click)="nextPage()">
 
                     <i class="bi bi-chevron-right"></i>

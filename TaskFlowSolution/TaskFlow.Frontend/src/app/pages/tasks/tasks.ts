@@ -59,12 +59,14 @@ export class Tasks implements OnInit {
 
   errorMessage = '';
 
+  totalCount = 0;
+
   query: TaskQuery = {
     page: 1,
-    pageSize: 15,
+    pageSize: 10,
     search: undefined,
     sortBy: undefined,
-    descending: true,
+    descending: false,
     categoryId: undefined,
   };
 
@@ -93,7 +95,9 @@ export class Tasks implements OnInit {
     }).subscribe({
 
       next: ({ tasks, categories }) => {
-
+        this.query.page = tasks.page;
+        this.query.pageSize = tasks.pageSize;
+        this.totalCount = tasks.totalCount;
         this.categories = categories;
 
         this.setTasks(tasks.items);
@@ -139,6 +143,7 @@ export class Tasks implements OnInit {
     this.selectedTask = null;
 
     this.showEditModal = true;
+
 
   }
 
@@ -188,6 +193,11 @@ export class Tasks implements OnInit {
             this.replaceTask(updatedTask);
 
             this.closeEditTask();
+          },
+
+          complete: () => {
+
+            this.reloadTasks();
 
           },
 
@@ -217,6 +227,11 @@ export class Tasks implements OnInit {
           this.activeTasks.unshift(task);
 
           this.closeEditTask();
+        },
+
+        complete: () => {
+
+          this.reloadTasks();
 
         },
 
@@ -249,6 +264,12 @@ export class Tasks implements OnInit {
             this.closeEditTask();
 
           }
+
+        },
+
+        complete: () => {
+
+          this.reloadTasks();
 
         },
 
@@ -307,10 +328,12 @@ export class Tasks implements OnInit {
 
   }
 
-    toggleCompleted(task: Task): void {
+  toggleCompleted(task: Task): void {
 
+    const wasPrevioslyCompleted = !task.isCompleted;
+    
     const request =
-      task.isCompleted
+      wasPrevioslyCompleted
         ? this.taskService.uncomplete(task.id)
         : this.taskService.complete(task.id);
 
@@ -324,6 +347,11 @@ export class Tasks implements OnInit {
           ...this.activeTasks,
           ...this.completedTasks,
         ]);
+      },
+
+      complete: () => {
+
+        this.reloadTasks();
 
       },
 
@@ -377,7 +405,7 @@ export class Tasks implements OnInit {
 
     this.query.sortBy = TaskSortBy.None;
 
-    this.query.descending = true;
+    this.query.descending = false;
 
     this.reloadTasks();
 
@@ -395,9 +423,11 @@ export class Tasks implements OnInit {
       .subscribe({
 
         next: result => {
+          this.query.page = result.page;
+          this.query.pageSize = result.pageSize;
+          this.totalCount = result.totalCount;
 
           this.setTasks(result.items);
-
         },
 
         error: () => {
@@ -410,10 +440,17 @@ export class Tasks implements OnInit {
         complete: () => {
 
           this.isLoading = false;
-
+          this.cdr.detectChanges();
         },
 
       });
 
+  }
+
+  get totalPages(): number {
+    return Math.max(
+      1,
+      Math.ceil(this.totalCount / this.query.pageSize)
+    );
   }
 }

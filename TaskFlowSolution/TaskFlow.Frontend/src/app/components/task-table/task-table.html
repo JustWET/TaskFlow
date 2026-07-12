@@ -6,7 +6,11 @@
 
         <span class="arrow">
 
-            {{ collapsed ? '▶' : '▼' }}
+            <i
+                class="bi"
+                [class.bi-chevron-right]="collapsed"
+                [class.bi-chevron-down]="!collapsed">
+            </i>
 
         </span>
 

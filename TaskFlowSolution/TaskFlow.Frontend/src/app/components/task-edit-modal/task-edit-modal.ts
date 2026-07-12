@@ -14,6 +14,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { ChangeDetectorRef} from '@angular/core';
 
 import { Task } from '../../models/task/task.model';
 import { Priority } from '../../models/task/priority.enum';
@@ -47,6 +48,7 @@ export class TaskEditModal implements OnChanges {
 
   protected readonly Priority = Priority;
   private readonly fb = inject(FormBuilder);
+  private readonly cdr = inject(ChangeDetectorRef);
   readonly priorities = Object.values(Priority);
 
   readonly form = this.fb.nonNullable.group({
@@ -69,14 +71,25 @@ export class TaskEditModal implements OnChanges {
   });
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['task'] && this.task) {
-      this.form.patchValue({
-        name: this.task.name,
-        description: this.task.description ?? '',
-        priority: this.task.priority,
-        dueDate: this.task.dueDate ?? '',
-        categoryId: this.task.categoryId ?? '',
-      });
+    if (changes['visible'] && this.visible) {
+      if (this.task) {
+
+        this.form.reset({
+          name: this.task.name,
+          description: this.task.description ?? '',
+          priority: this.task.priority,
+          dueDate: this.task.dueDate ?? '',
+          categoryId: this.task.categoryId ?? '',
+        });
+      } else {
+        this.form.reset({
+          name: '',
+          description: '',
+          priority: Priority.Low,
+          dueDate: '',
+          categoryId: '',
+        });
+      }
     }
   }
 
@@ -85,10 +98,8 @@ export class TaskEditModal implements OnChanges {
   }
 
   onSave(): void {
-    console.log("onSave()")
 
     if (this.form.invalid) {
-      console.log("Form is INVALID");
       return;
     }
 
@@ -100,7 +111,17 @@ export class TaskEditModal implements OnChanges {
       categoryId: this.form.controls.categoryId.value || null,
     };
 
-    console.log("Save emits!")
     this.save.emit(request);
+    this.cdr.detectChanges();
+  }
+
+  get isEditMode(): boolean {
+    return this.task !== null;
+  }
+
+  get title(): string {
+    return this.isEditMode
+      ? 'Edit Task'
+      : 'Create Task';
   }
 }

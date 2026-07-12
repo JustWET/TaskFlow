@@ -19,6 +19,9 @@ export class TaskToolbar {
   @Input({ required: true })
   query!: TaskQuery;
 
+  @Input({ required: true })
+  totalPages!: number;
+
   @Input()
   categories: Category[] = [];
 
