@@ -1,5 +1,23 @@
 <div class="card toolbar shadow-sm">
 
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <button
+                class="btn btn-outline-secondary"
+                (click)="goBack.emit()">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Back
+
+            </button>
+
+        </div>
+
+    </div>
+
     <div class="card-body">
 
         <div class="row g-3 align-items-center">
@@ -121,17 +139,27 @@
         <hr>
 
         <div class="d-flex justify-content-between align-items-center">
+            <div> 
+                <button
+                    class="btn btn-outline-secondary btn-sm"
+                    style="margin-right: 10px;"
+                    type="button"
+                    (click)="clearFilters()">
 
-            <button
-                class="btn btn-outline-secondary btn-sm"
-                type="button"
-                (click)="clearFilters()">
+                    <i class="bi bi-arrow-counterclockwise me-2"></i>
 
-                <i class="bi bi-arrow-counterclockwise me-2"></i>
+                    Reset Filters
 
-                Reset Filters
+                </button>
 
-            </button>
+                <button
+                    class="btn btn-outline-secondary"
+                    (click)="manageCategories.emit()">
+
+                    Manage Categories
+
+                </button>
+            </div>
 
             <div class="btn-group">
 

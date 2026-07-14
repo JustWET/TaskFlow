@@ -5,7 +5,9 @@
         [totalPages] = "totalPages"
         [categories]="categories"
         (queryChanged)="onQueryChanged($event)"
-        (createTask)="createTask()">
+        (createTask)="createTask()"
+        (manageCategories)="openCategoryManager()"
+        (goBack)="goBack()">
     </app-task-toolbar>
 
     <app-task-table
@@ -41,7 +43,17 @@
         [task]="selectedTask"
         [categories]="categories"
         (close)="closeEditTask()"
-        (save)="saveTask($event)">
+        (save)="saveTask($event)"
+        (createCategory)="createCategory($event)">
     </app-task-edit-modal>
+
+    <app-category-manager-modal
+        [visible]="showCategoryManager"
+        [categories]="categories"
+        (close)="closeCategoryManager()"
+        (create)="createCategory($event)"
+        (rename)="renameCategory($event)"
+        (delete)="deleteCategory($event)">
+    </app-category-manager-modal>
 
 </div>

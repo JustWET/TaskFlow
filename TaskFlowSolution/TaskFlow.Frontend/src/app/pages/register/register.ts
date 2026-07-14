@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import {
   FormBuilder,
   ReactiveFormsModule,
-  Validators,
+  Validators
 } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-
+import { Router } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 @Component({
   selector: 'app-register',
   imports: [
@@ -16,7 +17,12 @@ import { RouterLink } from '@angular/router';
   styleUrl: './register.css',
 })
 export class Register {
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
+
+  isLoading = false;
+  errorMessage = '';
 
   readonly registerForm = this.fb.nonNullable.group({
     username: [
@@ -40,6 +46,28 @@ export class Register {
       return;
     }
 
-    console.log(this.registerForm.getRawValue());
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.authService.register(this.registerForm.getRawValue()).subscribe({
+      next: () => {
+        this.router.navigate(['/task-lists']);
+      },
+
+      error: (error) => {
+        this.isLoading = false;
+
+        if (error.status === 401) {
+          this.errorMessage = 'Invalid username or password.';
+        }
+        else {
+          this.errorMessage = 'Unexpected error.';
+        }
+      },
+
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
   }
 }

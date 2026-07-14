@@ -10,6 +10,7 @@ import {
 
 import { CommonModule } from '@angular/common';
 import {
+  FormsModule,
   FormBuilder,
   ReactiveFormsModule,
   Validators,
@@ -24,6 +25,7 @@ import { SaveTaskRequest } from '../../models/task/save-task-request.model';
 @Component({
   selector: 'app-task-edit-modal',
   imports: [
+    FormsModule,
     CommonModule,
     ReactiveFormsModule,
   ],
@@ -46,10 +48,18 @@ export class TaskEditModal implements OnChanges {
   @Output()
   save = new EventEmitter<SaveTaskRequest>();
 
+  @Output()
+  createCategory = new EventEmitter<string>();
+
   protected readonly Priority = Priority;
   private readonly fb = inject(FormBuilder);
   private readonly cdr = inject(ChangeDetectorRef);
   readonly priorities = Object.values(Priority);
+
+  showCreateCategory = false;
+
+  readonly newCategoryControl =
+    this.fb.nonNullable.control('');
 
   readonly form = this.fb.nonNullable.group({
     name: [
@@ -123,5 +133,40 @@ export class TaskEditModal implements OnChanges {
     return this.isEditMode
       ? 'Edit Task'
       : 'Create Task';
+  }
+  
+  openCreateCategory(): void {
+
+    this.showCreateCategory = true;
+
+    this.newCategoryControl.reset();
+
+  }
+
+  cancelCreateCategory(): void {
+
+    this.showCreateCategory = false;
+
+    this.newCategoryControl.reset();
+
+  }
+
+  confirmCreateCategory(): void {
+
+    console.log("confirmCreateCategory");
+    const name =
+      this.newCategoryControl.value.trim();
+
+    if (!name) {
+      console.log("failed");
+      return;
+    }
+
+    this.createCategory.emit(name);
+
+    this.showCreateCategory = false;
+
+    this.newCategoryControl.reset();
+
   }
 }

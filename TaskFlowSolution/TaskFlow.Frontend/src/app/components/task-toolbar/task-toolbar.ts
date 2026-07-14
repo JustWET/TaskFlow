@@ -31,6 +31,12 @@ export class TaskToolbar {
   @Output()
   createTask = new EventEmitter<void>();
 
+  @Output()
+  manageCategories = new EventEmitter<void>();
+
+  @Output()
+  goBack = new EventEmitter<void>();
+
   readonly TaskSortBy = TaskSortBy;
 
   readonly sortOptions = Object.values(TaskSortBy);

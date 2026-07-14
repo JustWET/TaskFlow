@@ -18,6 +18,7 @@ import { CategoryService } from '../../core/services/category.service';
 import { TaskToolbar } from '../../components/task-toolbar/task-toolbar';
 import { TaskTable } from '../../components/task-table/task-table';
 import { TaskEditModal } from '../../components/task-edit-modal/task-edit-modal';
+import { CategoryManagerModal } from '../../components/category-manager-modal/category-manager-modal';
 
 @Component({
   selector: 'app-tasks',
@@ -25,6 +26,7 @@ import { TaskEditModal } from '../../components/task-edit-modal/task-edit-modal'
     TaskToolbar,
     TaskTable,
     TaskEditModal,
+    CategoryManagerModal,
   ],
   templateUrl: './tasks.html',
   styleUrl: './tasks.css',
@@ -46,6 +48,8 @@ export class Tasks implements OnInit {
   completedTasks: Task[] = [];
 
   categories: Category[] = [];
+
+  showCategoryManager = false;
 
   selectedTask: Task | null = null;
 
@@ -441,6 +445,145 @@ export class Tasks implements OnInit {
 
           this.isLoading = false;
           this.cdr.detectChanges();
+        },
+
+      });
+
+  }
+
+  private reloadCategories(): void {
+
+    this.categoryService
+      .getAll()
+      .subscribe({
+
+        next: categories => {
+
+          this.categories =
+            categories;
+
+        },
+
+        complete: () => {
+          this.cdr.detectChanges();
+        },
+
+      });
+
+  }
+
+  openCategoryManager(): void {
+
+    this.showCategoryManager = true;
+
+  }
+
+  closeCategoryManager(): void {
+
+    this.showCategoryManager = false;
+
+  }
+
+  createCategory(name: string): void {
+
+    this.categoryService
+      .create({
+        name,
+      })
+      .subscribe({
+
+        next: category => {
+
+          this.categories = [
+            ...this.categories,
+            category,
+          ];
+
+        },
+
+        error: () => {
+
+          this.errorMessage =
+            'Unable to create category.';
+
+        },
+
+        complete: () => {
+          this.reloadCategories();
+        },
+
+      });
+
+  }
+
+  renameCategory(event: {
+    id: string;
+    name: string;
+  }): void {
+
+    this.categoryService
+      .update(
+        event.id,
+        {
+          name: event.name,
+        },
+      )
+      .subscribe({
+
+        next: () => {
+
+          const category =
+            this.categories.find(
+              c => c.id === event.id,
+            );
+
+          if (category) {
+
+            category.name = event.name;
+
+          }
+
+        },
+
+        error: () => {
+
+          this.errorMessage =
+            'Unable to rename category.';
+
+        },
+
+        complete: () => {
+          this.reloadCategories();
+        },
+
+      });
+
+  }
+
+  deleteCategory(categoryId: string): void {
+
+    this.categoryService
+      .delete(categoryId)
+      .subscribe({
+
+        next: () => {
+
+          this.categories =
+            this.categories.filter(
+              c => c.id !== categoryId,
+            );
+
+        },
+
+        error: () => {
+
+          this.errorMessage =
+            'Unable to delete category.';
+
+        },
+
+        complete: () => {
+          this.reloadCategories();
         },
 
       });

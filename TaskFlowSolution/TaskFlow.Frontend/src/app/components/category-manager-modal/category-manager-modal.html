@@ -1,0 +1,142 @@
+@if (visible) {
+
+    <div class="modal-backdrop fade show"></div>
+
+    <div
+        class="modal fade show d-block"
+        tabindex="-1">
+
+        <div class="modal-dialog modal-lg">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+
+                        Manage Categories
+
+                    </h5>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        (click)="onClose()">
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    @for (category of categories; track category.id) {
+
+                        <div class="category-row">
+
+                            @if (isEditing(category.id)) {
+
+                                <input
+                                    class="form-control"
+                                    [(ngModel)]="editingName"
+                                    [ngModelOptions]="{ standalone: true }">
+
+                                <div class="actions">
+
+                                    <button
+                                        class="btn btn-success btn-sm"
+                                        (click)="saveEdit(category.id)">
+
+                                        Save
+
+                                    </button>
+
+                                    <button
+                                        class="btn btn-outline-secondary btn-sm"
+                                        (click)="cancelEdit()">
+
+                                        Cancel
+
+                                    </button>
+
+                                </div>
+
+                            } @else {
+
+                                <span class="category-name">
+
+                                    {{ category.name }}
+
+                                </span>
+
+                                <div class="actions">
+
+                                    <button
+                                        class="btn btn-outline-primary btn-sm"
+                                        (click)="startEdit(category)">
+
+                                        Rename
+
+                                    </button>
+
+                                    <button
+                                        class="btn btn-outline-danger btn-sm"
+                                        (click)="onDelete(category.id)">
+
+                                        Delete
+
+                                    </button>
+
+                                </div>
+
+                            }
+
+                        </div>
+
+                    }
+
+                    <hr>
+
+                    <form
+                        [formGroup]="createForm">
+
+                        <label class="form-label">
+
+                            New Category
+
+                        </label>
+
+                        <input
+                            class="form-control"
+                            formControlName="name">
+
+                    </form>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button
+                        class="btn btn-outline-secondary"
+                        (click)="onClose()">
+
+                        Close
+
+                    </button>
+
+                    <button
+                        class="btn btn-primary"
+                        (click)="onCreate()"
+                        [disabled]="createForm.invalid">
+
+                        Create
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+}

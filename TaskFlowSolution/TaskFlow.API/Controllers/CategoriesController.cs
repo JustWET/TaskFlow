@@ -50,9 +50,9 @@ namespace TaskFlow.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CategoryDto>> Create(string name)
+        public async Task<ActionResult<CategoryDto>> Create(CreateOrUpdateCategoryDto request)
         {
-            var category = await _categoryService.CreateAsync(GetUserId(), name);
+            var category = await _categoryService.CreateAsync(GetUserId(), request.Name);
 
             var response = new CategoryDto
             {
@@ -64,9 +64,9 @@ namespace TaskFlow.API.Controllers
         }
 
         [HttpPut("{categoryId:guid}")]
-        public async Task<IActionResult> Update(Guid categoryId, string name)
+        public async Task<IActionResult> Update(Guid categoryId, CreateOrUpdateCategoryDto request)
         {
-            await _categoryService.UpdateAsync(GetUserId(), categoryId, name);
+            await _categoryService.UpdateAsync(GetUserId(), categoryId, request.Name);
 
             return NoContent();
         }
